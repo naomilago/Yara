@@ -43,20 +43,22 @@ async def whatsapp_webhook(request: Request, background_tasks: BackgroundTasks):
         for msg in messages:
           msg_type = msg.get('type', '')
 
-          if msg_type == 'text':
+          if msg_type in ('text', 'audio'):
             from_number = msg.get('from', '')
-            text = msg.get('text', {}).get('body', '')
+            text = msg.get('text', {}).get('body', '') if msg_type == 'text' else ''
+            audio_id = msg.get('audio', {}).get('id', '') if msg_type == 'audio' else ''
 
-            if from_number and text:
-              # Detecta se o usuário quer resposta em áudio
+            if from_number and (text or audio_id):
+              # Detecta se o usuário quer resposta em áudio ou se enviou um áudio
               audio_keywords = ('áudio', 'audio', 'voz', 'falar', 'ouvir')
-              request_audio = any(kw in text.lower() for kw in audio_keywords)
+              request_audio = (msg_type == 'audio') or any(kw in text.lower() for kw in audio_keywords)
 
               background_tasks.add_task(
                 handle_message,
                 from_number=from_number,
                 text=text,
                 request_audio=request_audio,
+                audio_id=audio_id,
               )
 
   except Exception:

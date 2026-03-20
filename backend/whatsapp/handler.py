@@ -3,7 +3,8 @@ import logging
 from agent.graph import build_graph
 from settings import settings
 from whatsapp.tts import generate_audio
-from whatsapp.client import send_audio, send_text
+from whatsapp.client import send_audio, send_text, download_media
+from groq import AsyncGroq
 
 logger = logging.getLogger(__name__)
 
@@ -26,14 +27,30 @@ async def handle_message(
   from_number: str,
   text: str,
   request_audio: bool = False,
+  audio_id: str = '',
 ) -> None:
   '''Processa uma mensagem de WhatsApp, chama o agente e envia a resposta.
   Args:
       from_number: Número do remetente (usado como session_id).
       text: Texto da mensagem recebida.
       request_audio: Se True, gera e envia áudio além do texto.
+      audio_id: ID do áudio se a mensagem for de voz.
   '''
   try:
+    if audio_id:
+      try:
+        audio_bytes = await download_media(audio_id)
+        client = AsyncGroq(api_key=settings.groq_api_key)
+        transcription = await client.audio.transcriptions.create(
+          file=('audio.ogg', audio_bytes),
+          model=settings.groq_whisper_model,
+          language='pt',
+        )
+        text = transcription.text
+        logger.info('Áudio recebido e transcrito: %s', text)
+      except Exception as e:
+        logger.error('Erro na transcrição de áudio: %s', e)
+        text = 'Eu recebi um áudio seu, mas tive problemas técnicos para ouvir agora. Pode digitar?'
     # Constrói o grafo usando o número como session_id
     # para persistir sessões de diário e rastreador de humor
     graph = build_graph(

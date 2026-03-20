@@ -59,6 +59,28 @@ async def upload_media(audio_bytes: bytes) -> str:
     return media_id
 
 
+async def download_media(media_id: str) -> bytes:
+  '''Recupera a URL do arquivo de mídia e faz o download.
+  Args:
+      media_id: ID da mídia recebido pelo Webhook.
+  Returns:
+      Bytes do arquivo de áudio.
+  '''
+  url_info = f'{GRAPH_API_BASE}/{media_id}'
+  async with httpx.AsyncClient() as client:
+    resp = await client.get(url_info, headers=_auth_headers())
+    resp.raise_for_status()
+    media_url = resp.json().get('url')
+
+    if not media_url:
+      raise ValueError('URL de mídia não encontrada.')
+
+    media_resp = await client.get(media_url, headers=_auth_headers())
+    media_resp.raise_for_status()
+    logger.info('Mídia baixada com sucesso — [%d] bytes', len(media_resp.content))
+    return media_resp.content
+
+
 async def send_audio(to: str, audio_bytes: bytes) -> None:
   '''Faz upload do áudio OGG e envia como mensagem de áudio no WhatsApp.
   Args:

@@ -9,73 +9,27 @@ from agent.tools.crisis_support import (
   contato_antra,
   localizar_caps,
 )
-from agent.tools.health import (
-  buscar_ambulatorio,
-  info_hormonizacao,
-  preparar_consulta,
-  cuidados_pos_cirurgia,
-)
-from agent.tools.rights import (
-  retificar_nome_genero,
-  usar_nome_social,
-  denunciar_transfobia,
-  direitos_trans,
-)
 from agent.tools.wellbeing import (
   meditacao_guiada,
   diario_transicao,
   rastreador_humor,
   afirmacao_positiva,
 )
-from agent.tools.community import (
-  buscar_eventos,
-  grupos_apoio,
-  historias_inspiradoras,
-)
-from agent.tools.practical import (
-  transicao_no_trabalho,
-  empresas_inclusivas,
-  seguranca_digital,
-)
-from agent.tools.identity import (
-  guia_pronomes,
-  gerador_nomes,
-  musicas_afirmativas,
-)
+from agent.tools.search import pesquisar_web
 
 ALL_TOOLS = [
-  # Apoio em crise
+  # Apoio em crise (MANTIDOS E ESTÁVEIS)
   recursos_crise,
   contato_cvv,
   contato_antra,
   localizar_caps,
-  # Saúde
-  buscar_ambulatorio,
-  info_hormonizacao,
-  preparar_consulta,
-  cuidados_pos_cirurgia,
-  # Direitos
-  retificar_nome_genero,
-  usar_nome_social,
-  denunciar_transfobia,
-  direitos_trans,
   # Bem-estar
   meditacao_guiada,
   diario_transicao,
   rastreador_humor,
   afirmacao_positiva,
-  # Comunidade
-  buscar_eventos,
-  grupos_apoio,
-  historias_inspiradoras,
-  # Vida prática
-  transicao_no_trabalho,
-  empresas_inclusivas,
-  seguranca_digital,
-  # Identidade
-  guia_pronomes,
-  gerador_nomes,
-  musicas_afirmativas,
+  # Buscador Dinâmico (SUBSTITUIU 15 FERRAMENTAS ESTÁTICAS)
+  pesquisar_web,
 ]
 
 

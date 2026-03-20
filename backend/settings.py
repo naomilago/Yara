@@ -11,6 +11,7 @@ class Settings(BaseSettings):
   # Groq / LLM
   groq_api_key: str = ''
   model_name: str = 'llama-3.1-8b-instant'
+  groq_whisper_model: str = 'whisper-large-v3-turbo'
 
   # WhatsApp Cloud API
   whatsapp_token: str = ''

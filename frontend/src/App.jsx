@@ -3,7 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { Moon, Sun, Shield, ArrowRight, MessageCircle, Heart, Sparkles, BookOpen } from 'lucide-react';
 import logoSrc from './assets/logo.png';
 
-const WhatsAppRedirectUrl = 'https://wa.me/15551425081?text=Oi%20Yara!%20%F0%9F%8C%BA';
+const WhatsAppRedirectUrl = 'https://wa.me/5519981324213?text=Ol%C3%A1%2C%20Yara%20%E2%9C%A8';
 
 const Header = ({ theme, toggleTheme }) => (
   <header className="main-header">
@@ -71,7 +71,7 @@ const LandingPage = () => {
               <MessageCircle size={22} />
               Conversar no WhatsApp
             </a>
-            <p className="whatsapp-number">+1 (555) 142-5081</p>
+            <p className="whatsapp-number">+55 (19) 98132-4213</p>
           </div>
         </div>
       </section>
