@@ -47,18 +47,11 @@ def build_graph(model_name: str = 'llama-3.1-8b-instant', session_id: str = 'def
   '''
   llm = ChatGroq(model=model_name, temperature=0.0)
 
-  def state_modifier(state):
-    '''Prepara as mensagens para o LLM: adiciona o prompt do sistema e mantém apenas as últimas 10 mensagens.'''
-    system_msg = SystemMessage(content=YARA_SYSTEM_PROMPT)
-    messages = state.get('messages', [])
-    # Mantém apenas as últimas 10 mensagens de histórico
-    trimmed_messages = messages[-10:] if len(messages) > 10 else messages
-    return [system_msg] + trimmed_messages
-
+  # Revertido para usar o parâmetro 'prompt' para compatibilidade com a versão instalada do LangGraph
   graph = create_react_agent(
     model=llm,
     tools=ALL_TOOLS,
-    state_modifier=state_modifier,
+    prompt=YARA_SYSTEM_PROMPT,
     checkpointer=_checkpointer,
   )
 

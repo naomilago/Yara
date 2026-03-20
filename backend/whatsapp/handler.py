@@ -64,12 +64,34 @@ async def handle_message(
     clear_keywords = ['!limpar', 'reset', 'faxina', 'esqueça tudo', 'reiniciar']
     if any(keyword in text.lower() for keyword in clear_keywords):
       logger.info("Limpando histórico para %s", from_number)
-      # No LangGraph, podemos "limpar" o estado enviando uma lista vazia de mensagens 
-      # ou usando update_state para sobrescrever.
-      # A forma mais garantida de resetar o fio (thread) é sobrescrever as mensagens.
       graph.update_state(config, {"messages": []})
       await send_text(to=from_number, text="Entendido! Faxina feita. 🧹 Minha memória sobre nossa conversa foi resetada. Como posso te ajudar agora? 💙")
       return
+
+    # Auto-Trimming: Mantém apenas as últimas 10 mensagens no checkpointer
+    # Isso evita o erro 413 (TPM limit) do Groq de forma compatível com qualquer versão do LangGraph.
+    try:
+      state = graph.get_state(config)
+      existing_messages = state.values.get('messages', [])
+      if len(existing_messages) > 10:
+        logger.info("Trimming history for %s (current size: %d)", from_number, len(existing_messages))
+        # Mantém as últimas 10 mensagens
+        trimmed_messages = existing_messages[-10:]
+        # Note: update_state com uma lista de mensagens costuma concatenar (via AddableValues)
+        # Para sobrescrever, precisamos ver se o reducer permite. 
+        # Em LangGraph prebuilt agents, o reducer de 'messages' é geralmente 'add'.
+        # Se for 'add', não podemos deletar facilmente via update_state unless we use RemoveMessage.
+        # Mas RemoveMessage pode não estar disponível em versões muito antigas.
+      
+        # Alternativa mais simples: bypass trimming via state_modifier se possível, 
+        # mas já vimos que não é compatível.
+        # Então vamos usar a estratégia de RemoveMessage se disponível.
+        from langchain_core.messages import RemoveMessage
+        messages_to_remove = [RemoveMessage(id=m.id) for m in existing_messages[:-10] if getattr(m, 'id', None)]
+        if messages_to_remove:
+          graph.update_state(config, {"messages": messages_to_remove})
+    except Exception as e:
+      logger.warning("Erro ao tentar trimar histórico: %s. Continuando sem trimar.", e)
 
     # O checkpointer (MemorySaver) nativo do LangGraph cuidará do histórico.
     # Passamos apenas a mensagem mais recente.
