@@ -34,12 +34,14 @@ async def health_check():
   return {'status': 'ok', 'service': 'Yara API', 'version': '1.0.0'}
 
 # Se a pasta static existir (no Docker), serve o Frontend React
-if os.path.exists('static'):
-  app.mount('/', StaticFiles(directory='static', html=True), name='static')
+static_path = os.path.join(os.path.dirname(__file__), 'static')
+if os.path.exists(static_path):
+  app.mount('/', StaticFiles(directory=static_path, html=True), name='static')
 
   @app.exception_handler(404)
   async def catch_all_for_react(request: Request, exc):
-    return FileResponse('static/index.html')
+    index_path = os.path.join(static_path, 'index.html')
+    return FileResponse(index_path)
 
 
 async def stream_agent_response(message: str, session_id: str) -> AsyncGenerator[str, None]:

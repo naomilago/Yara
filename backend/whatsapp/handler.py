@@ -81,9 +81,10 @@ async def handle_message(
   except Exception as e:
     logger.exception('Erro crítico ao processar mensagem de %s:', from_number)
     try:
+      error_msg = f'Desculpa, tive um problema técnico ({type(e).__name__}: {str(e)}). Tente novamente em instantes. 💙'
       await send_text(
         to=from_number,
-        text='Desculpa, tive um problema técnico. Tente novamente em instantes. 💙',
+        text=error_msg,
       )
     except Exception:
       pass

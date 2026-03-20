@@ -33,6 +33,11 @@ ALL_TOOLS = [
 ]
 
 
+# Checkpointer global para manter a memória enquanto o processo estiver vivo
+# Nota: Em Cloud Run (serverless), isso será resetado se o container escalar para zero.
+_checkpointer = MemorySaver()
+
+
 def build_graph(model_name: str = 'llama-3.1-8b-instant', session_id: str = 'default'):
   '''Constrói e retorna o grafo LangGraph compilado com todas as ferramentas da Yara.
   Args:
@@ -41,13 +46,11 @@ def build_graph(model_name: str = 'llama-3.1-8b-instant', session_id: str = 'def
   '''
   llm = ChatGroq(model=model_name, temperature=0.0)
 
-  checkpointer = MemorySaver()
-
   graph = create_react_agent(
     model=llm,
     tools=ALL_TOOLS,
     prompt=YARA_SYSTEM_PROMPT,
-    checkpointer=checkpointer,
+    checkpointer=_checkpointer,
   )
 
   return graph
