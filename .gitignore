@@ -1,0 +1,25 @@
+# Environments
+backend/.env
+backend/.venv/
+frontend/node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Frontend Builds
+frontend/dist/
+frontend/dist-ssr/
+*.local
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.suo
+
+# Logs
+*.log
+import_trace.log

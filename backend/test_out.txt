@@ -1,0 +1,7 @@
+C:\Users\info\Desktop\PROJECTS\PERSONAL\Yara\backend\.venv\Lib\site-packages\pydub\utils.py:170: RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+  warn("Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work", RuntimeWarning)
+INFO:httpx:HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 401 Unauthorized"
+ERROR:whatsapp.handler:Erro ao processar mensagem de 1234567890: Error code: 401 - {'error': {'message': 'Invalid API Key', 'type': 'invalid_request_error', 'code': 'invalid_api_key'}}
+INFO:httpx:HTTP Request: POST https://graph.facebook.com/v25.0/1086236211230131/messages "HTTP/1.1 400 Bad Request"
+Testing handle_message...
+handle_message executed!

@@ -1,0 +1,8 @@
+backend/.venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/import_trace.log
+frontend/dist/
+frontend/node_modules/
+.git/

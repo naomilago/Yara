@@ -1,0 +1,21 @@
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# LangGraph / LangChain
+langgraph>=0.2.0
+langchain>=0.2.0
+langchain-groq>=0.1.6
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+
+# HTTP client
+httpx>=0.27.0
+
+# Audio conversion (MP3 -> OGG Opus for WhatsApp)
+pydub>=0.25.1
+
+# Search tools
+duckduckgo-search>=6.1.0
