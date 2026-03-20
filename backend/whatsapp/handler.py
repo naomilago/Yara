@@ -60,6 +60,17 @@ async def handle_message(
 
     config = {'configurable': {'thread_id': from_number}}
 
+    # Lógica de limpar histórico/resetar memória
+    clear_keywords = ['!limpar', 'reset', 'faxina', 'esqueça tudo', 'reiniciar']
+    if any(keyword in text.lower() for keyword in clear_keywords):
+      logger.info("Limpando histórico para %s", from_number)
+      # No LangGraph, podemos "limpar" o estado enviando uma lista vazia de mensagens 
+      # ou usando update_state para sobrescrever.
+      # A forma mais garantida de resetar o fio (thread) é sobrescrever as mensagens.
+      graph.update_state(config, {"messages": []})
+      await send_text(to=from_number, text="Entendido! Faxina feita. 🧹 Minha memória sobre nossa conversa foi resetada. Como posso te ajudar agora? 💙")
+      return
+
     # O checkpointer (MemorySaver) nativo do LangGraph cuidará do histórico.
     # Passamos apenas a mensagem mais recente.
     result = graph.invoke({'messages': [{'role': 'user', 'content': text}]}, config=config)

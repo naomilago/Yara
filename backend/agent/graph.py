@@ -1,6 +1,7 @@
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from langchain_groq import ChatGroq
+from langchain_core.messages import SystemMessage, RemoveMessage
 
 from agent.prompts import YARA_SYSTEM_PROMPT
 from agent.tools.crisis_support import (
@@ -46,10 +47,18 @@ def build_graph(model_name: str = 'llama-3.1-8b-instant', session_id: str = 'def
   '''
   llm = ChatGroq(model=model_name, temperature=0.0)
 
+  def state_modifier(state):
+    '''Prepara as mensagens para o LLM: adiciona o prompt do sistema e mantém apenas as últimas 10 mensagens.'''
+    system_msg = SystemMessage(content=YARA_SYSTEM_PROMPT)
+    messages = state.get('messages', [])
+    # Mantém apenas as últimas 10 mensagens de histórico
+    trimmed_messages = messages[-10:] if len(messages) > 10 else messages
+    return [system_msg] + trimmed_messages
+
   graph = create_react_agent(
     model=llm,
     tools=ALL_TOOLS,
-    prompt=YARA_SYSTEM_PROMPT,
+    state_modifier=state_modifier,
     checkpointer=_checkpointer,
   )
 
