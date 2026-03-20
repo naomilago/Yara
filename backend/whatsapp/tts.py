@@ -7,7 +7,7 @@ from pydub import AudioSegment
 
 from settings import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) 
 
 ELEVENLABS_TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}'
 MAX_CHARS = 500
