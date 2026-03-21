@@ -14,10 +14,10 @@ O projeto é acessível via WhatsApp (onde a mágica realmente acontece, com sup
   <table>
     <tr>
       <td align="center">
-        <img src="frontend/src/assets/yara-desktop.png" style="border-radius: 15px;" width="720" />
+        <img src="frontend/public/yara-desktop.png" style="border-radius: 15px;" width="720" />
       </td>
       <td align="center">
-        <img src="frontend/src/assets/yara-mobile.jpeg" style="border-radius: 15px;" width="250" />
+        <img src="frontend/public/yara-mobile.jpeg" style="border-radius: 15px;" width="250" />
       </td>
     </tr>
   </table>
